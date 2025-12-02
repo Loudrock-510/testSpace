@@ -230,11 +230,7 @@ public class Server {
 		return masterLog;
 	}
 	
-	/**
-	 * Gets all messages sent by a specific user across all groups and direct messages
-	 * @param username The username to search for
-	 * @return List of all messages sent by that user, sorted by timestamp (oldest first)
-	 */
+
 	public synchronized List<Message> getAllMessagesByUser(String username) {
 		List<Message> userMessages = new ArrayList<>();
 		
@@ -270,11 +266,7 @@ public class Server {
 		return directChats;
 	}
 	
-	/**
-	 * Gets a Group by its UID
-	 * @param groupUID The Group UID to find
-	 * @return The Group object, or null if not found
-	 */
+
 	public synchronized Group getGroupById(int groupUID) {
 		for (Group group : groups) {
 			if (group.getGroupUID() == groupUID) {
@@ -284,11 +276,7 @@ public class Server {
 		return null;
 	}
 	
-	/**
-	 * Gets a DirectMessage by its chat UID
-	 * @param chatUID The DirectMessage chat UID to find
-	 * @return The DirectMessage object, or null if not found
-	 */
+
 	public synchronized DirectMessage getDirectMessageById(int chatUID) {
 		for (DirectMessage dm : directChats) {
 			if (dm.getChatUID() == chatUID) {
@@ -297,13 +285,7 @@ public class Server {
 		}
 		return null;
 	}
-	
-	/**
-	 * Checks if two participant lists match (order-independent)
-	 * @param list1 First participant list
-	 * @param list2 Second participant list
-	 * @return true if both lists contain the same participants
-	 */
+
 	private boolean participantsMatch(List<String> list1, List<String> list2) {
 		if (list1.size() != list2.size()) {
 			return false;
@@ -315,14 +297,7 @@ public class Server {
 		return sorted1.equals(sorted2);
 	}
 	
-	/**
-	 * Finds an existing group with the same participants, or creates a new one
-	 * @param participants List of all participants (sender + recipients)
-	 * @param sender Username of the sender
-	 * @param messageText The message text
-	 * @param timestamp Timestamp of the message
-	 * @return The Group or DirectMessage object
-	 */
+
 	public synchronized Object findOrCreateGroup(List<String> participants, String sender, String messageText, LocalDateTime timestamp) {
 		// Check if exactly 2 participants (DirectMessage)
 		if (participants.size() == 2) {
@@ -355,11 +330,7 @@ public class Server {
 		}
 	}
 	
-	/**
-	 * Gets all groups and direct messages that a user participates in
-	 * @param username The username to search for
-	 * @return List of Group and DirectMessage objects
-	 */
+
 	public synchronized List<Object> getGroupsForUser(String username) {
 		List<Object> userGroups = new ArrayList<>();
 		
@@ -390,19 +361,13 @@ public class Server {
 		return userGroups;
 	}
 	
-	/**
-	 * Sorts messages in a Group by timestamp (oldest first, newest at end)
-	 * @param group The Group to sort
-	 */
+
 	private void sortMessagesByTimestamp(Group group) {
 		Collections.sort(group.getMessages(), (m1, m2) -> 
 			m1.getTimestamp().compareTo(m2.getTimestamp()));
 	}
 	
-	/**
-	 * Sorts messages in a DirectMessage by timestamp (oldest first, newest at end)
-	 * @param dm The DirectMessage to sort
-	 */
+
 	private void sortMessagesByTimestamp(DirectMessage dm) {
 		Collections.sort(dm.getMessage(), (m1, m2) -> 
 			m1.getTimestamp().compareTo(m2.getTimestamp()));
@@ -420,11 +385,7 @@ public class Server {
 		}
 	}
 	
-	/**
-	 * Adds a message to a Group
-	 * @param group The Group object
-	 * @param message The Message to add
-	 */
+
 	public synchronized void addMessageToGroup(Group group, Message message) {
 		group.getMessages().add(message);
 		sortMessagesByTimestamp(group); // Keep sorted
@@ -441,11 +402,7 @@ public class Server {
 		}).start();
 	}
 	
-	/**
-	 * Adds a message to a DirectMessage
-	 * @param dm The DirectMessage object
-	 * @param message The Message to add
-	 */
+
 	public synchronized void addMessageToDirectMessage(DirectMessage dm, Message message) {
 		dm.getMessage().add(message);
 		sortMessagesByTimestamp(dm); // Keep sorted
@@ -534,9 +491,7 @@ public class Server {
 	}
 
 	private void loadMsgs() {
-		// TODO: Implement proper loading from file
-		// This method needs to be refactored to properly deserialize Group and DirectMessage objects
-		// For now, leaving as placeholder to prevent compilation errors
+	
 		String s = loadData(msgsFile);
 		if (s == null || s.isEmpty()) {
 			return;
@@ -569,11 +524,6 @@ public class Server {
 		modified = false;
 	}
 	
-	/**
-	 * Saves all groups and direct messages to All_Messages.txt
-	 * Format: One message per line
-	 * MESSAGE|TYPE|UID|timestamp|sender|message|recipient1,recipient2
-	 */
 	public synchronized void saveGroupsToFile() {
 		// Try multiple possible locations for the file
 		File file = new File("All_Messages.txt");
@@ -615,13 +565,7 @@ public class Server {
 		} catch (IOException e) {
 		}
 	}
-	
-	/**
-	 * Loads groups and direct messages from All_Messages.txt
-	 * Format: One message per line
-	 * MESSAGE|TYPE|UID|timestamp|sender|message|recipient1,recipient2
-	 * Groups messages by TYPE and UID to reconstruct Group/DirectMessage objects
-	 */
+
 	private synchronized void loadGroupsFromFile() {
 		// Try multiple possible locations for the file
 		File file = new File("All_Messages.txt");

@@ -1,0 +1,14 @@
+/Client.class
+/ClientHandler.class
+/DirectMessage.class
+/Group.class
+/Log.class
+/LoginInfo.class
+/Message.class
+/Packet.class
+/PacketHandler$ClientPacketDelegate.class
+/PacketHandler$ServerPacketDelegate.class
+/PacketHandler.class
+/Server.class
+/Type.class
+/User.class
